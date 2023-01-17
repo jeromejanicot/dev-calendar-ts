@@ -9,7 +9,7 @@ export const getFirstDayMonth = (year: number, month: number) => {
 };
 
 export const daysInMonth = (year: number, month: number) => {
-  return 32 - new Date(year, month, 32).getDate();
+  return 33 - new Date(year, month, 32).getDate();
 };
 
 export const getDayName = (
