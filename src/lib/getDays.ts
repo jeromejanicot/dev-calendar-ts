@@ -12,14 +12,19 @@ export const daysInMonth = (year: number, month: number) => {
   return 33 - new Date(year, month, 32).getDate();
 };
 
-export const getDayName = (
+export const getDateName = (
   year: number,
   month: number,
-  day: number,
-  locale: string
+  locale: string,
+  day?: number
 ) => {
-  return new Date(year, month, day).toLocaleDateString(locale, {
-    weekday: "long",
+  if (day) {
+    return new Date(year, month, day).toLocaleDateString(locale, {
+      weekday: "long",
+    });
+  }
+  return new Date(year, month).toLocaleDateString(locale, {
+    month: "long",
   });
 };
 
@@ -27,6 +32,7 @@ export type DayNode = {
   dayNumber: number;
   dayName: string;
   month: number;
+  monthName: string;
 };
 
 export function allDays(year: number) {
@@ -36,8 +42,9 @@ export function allDays(year: number) {
     for (let d = 1; d < daysInMonth(year, m); d++) {
       daysOfYear.push({
         dayNumber: new Date(year, m, d).getDate(),
-        dayName: getDayName(year, m, d, localeEN),
+        dayName: getDateName(year, m, localeEN, d),
         month: m,
+        monthName: getDateName(year, m, localeEN),
       });
     }
   }

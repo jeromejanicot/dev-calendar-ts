@@ -1,4 +1,4 @@
-import { allDays, getFirstDayYear } from "./getDays";
+import { DayNode, allDays, getFirstDayYear } from "./getDays";
 
 export function genCalStruc(year: number) {
   let allDaysArray = allDays(year);
@@ -6,19 +6,17 @@ export function genCalStruc(year: number) {
 
   let blanks = [];
   for (let i = 0; i < firstDayYearNumber; i++) {
-    blanks.push("");
+    blanks.push(undefined);
   }
 
-  let daysInYear = [];
+  let daysInYear: DayNode[] = [];
   for (let d = 0; d < allDaysArray.length; d++) {
-    daysInYear.push(
-      `${allDaysArray[d].dayName} | ${allDaysArray[d].dayNumber} | ${allDaysArray[d].month} |`
-    );
+    daysInYear.push(allDaysArray[d]);
   }
 
   let totalDays = [...blanks, ...daysInYear];
-  let rows: string[][] = [];
-  let cells: string[] = [];
+  let rows: (DayNode | undefined)[][] = [];
+  let cells: (DayNode | undefined)[] = [];
 
   totalDays.forEach((row, i) => {
     if (i % 7 != 0) {

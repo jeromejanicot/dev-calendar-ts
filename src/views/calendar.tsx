@@ -1,6 +1,8 @@
-import { createElement } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
 import { GenerateYearType } from "../lib/getDays";
 import { genCalStruc } from "../lib/generateCalendar";
+import _ from "lodash";
+import CalendarRow from "../components/CalendarRows";
 
 const weekDaysEn = [
   "Sunday",
@@ -19,26 +21,37 @@ export default function Calendar({
   firstDayYearNumber,
   arrayMonths,
 }: GenerateYearType) {
+  const [showScroll, setShowScroll] = useState(false);
+
+  const listenToScroll = () => {
+    setShowScroll(true);
+
+    setTimeout(() => setShowScroll(false), 1000);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", listenToScroll);
+    () => window.removeEventListener("scroll", listenToScroll);
+  }, []);
+
   return (
     <>
-      <div className="w-full">
+      <div className="relative w-full">
         <table className="w-full">
-          <tr>
-            {weekDaysEn.map((day, index) => (
-              <th key={index} className="w-1/7">
-                {day}
-              </th>
-            ))}
-          </tr>
-          {rows.map((row, i) => (
+          <thead>
             <tr>
-              {row.map((cell, i) => (
-                <td className="bg-blue-800 border-solid border-white border-2 relative w-1/7 pb-40">
-                  <div className="absolute w-full h-full top-50%">{cell}</div>
-                </td>
+              {weekDaysEn.map((day, index) => (
+                <th key={index} className="w-1/7">
+                  {day}
+                </th>
               ))}
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <CalendarRow key={i} row={row} showScroll={showScroll} />
+            ))}
+          </tbody>
         </table>
       </div>
     </>
